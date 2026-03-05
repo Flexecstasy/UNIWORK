@@ -12,7 +12,7 @@
 
 ---
 
-##  Быстрый Старт (2 минуты)
+##  Старт 
 
 ```bash
 cd backend
@@ -23,19 +23,6 @@ uvicorn app.main:app --reload
 
 ---
 
-## 📚 Документация
-
-| Документ | Назначение |
-|----------|-----------|
-| **[GUIDE.md](GUIDE.md)** | Полный гайд проекта |
-| **[INDEX.md](INDEX.md)** |  Индекс документации |
-| **[CHECKLIST.md](CHECKLIST.md)** |  Что было сделано |
-| [backend/README.md](backend/README.md) | О бэкенде |
-| [backend/FRONTEND_INTEGRATION.md](backend/FRONTEND_INTEGRATION.md) | Интеграция фронтенда |
-| [backend/DEPLOYMENT.md](backend/DEPLOYMENT.md) | Развертывание |
-| [backend/app/core/ERROR_HANDLING.md](backend/app/core/ERROR_HANDLING.md) | Система ошибок |
-| [backend/tests/README_TESTS.md](backend/tests/README_TESTS.md) | Документация тестов |
-
 ---
 
 ##  Ключевые Особенности
@@ -44,9 +31,9 @@ uvicorn app.main:app --reload
 
 - 7 типов HTTP ошибок (400, 401, 403, 404, 409, 422, 500)
 - Структурированные JSON ответы
-- Детальная информация об ошибках
-- Локализация на русский язык
-- 70+ тестов для всех сценариев
+-  информация об ошибках
+
+
 
 ### Backend (FastAPI)
 
