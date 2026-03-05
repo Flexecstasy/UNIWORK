@@ -8,10 +8,10 @@ class RegisterSchema(BaseModel):
     role:       RoleEnum
     first_name: str
     last_name:  str
-    # поля студента (опционально)
+    # поля студента
     specialty:  str | None = None
     year:       int | None = None
-    # поля работодателя (опционально)
+    # поля работодателя
     organization: str | None = None
     contact_name: str | None = None
 

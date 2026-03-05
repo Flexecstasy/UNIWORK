@@ -42,7 +42,7 @@ def register(data: RegisterSchema, db: Session = Depends(get_db)):
              summary="Вход и получение JWT-токена")
 def login(data: LoginSchema, db: Session = Depends(get_db)):
     user = db.query(User).filter(User.email == data.email).first()
-    if not user or not verify_password(data.password, user.password):
+    if not user or not verify_password(data.password, user.hashed_password):
         raise AppError(401, "INVALID_CREDENTIALS", "Неверный email или пароль",
                        fix="Проверьте правильность введённых данных")
 

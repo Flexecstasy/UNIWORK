@@ -25,7 +25,7 @@ def update_status(db: Session, app_id: int, status: AppStatusEnum):
     if app:
         app.status = status
         # уведомление студенту
-        label = {"accepted": "принята ✅", "rejected": "отклонена ❌"}.get(status, status)
+        label = {"accepted": "принята ", "rejected": "отклонена "}.get(status, status)
         notif = Notification(
             user_id=app.student.user_id,
             text=f"Ваша заявка на вакансию #{app.job_id} {label}",
