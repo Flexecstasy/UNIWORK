@@ -1,8 +1,6 @@
 # UniWork - Платформа поиска работы для студентов
 
-[![Status](https://img.shields.io/badge/Status-Complete-brightgreen)]()
-[![Tests](https://img.shields.io/badge/Tests-70%2B-blue)]()
-[![Coverage](https://img.shields.io/badge/Coverage-95%25-green)]()
+
 [![Python](https://img.shields.io/badge/Python-3.14-blue)]()
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.115%2B-darkgreen)]()
 
