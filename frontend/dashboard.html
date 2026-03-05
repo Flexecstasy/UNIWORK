@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UniWork — Личный кабинет</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<nav class="uw-navbar">
+  <a href="index.html" class="uw-logo">Uni<span>Work</span></a>
+  <button class="uw-burger" id="uw-burger"><span></span><span></span><span></span></button>
+  <ul class="uw-nav-links" id="uw-nav-links">
+    <li><a href="index.html">Вакансии</a></li>
+    <div id="nav-right" style="display:contents"></div>
+  </ul>
+</nav>
+
+<div class="uw-dash">
+
+  <!-- Header -->
+  <div class="uw-dash-header">
+    <h1 id="user-greeting">Загрузка...</h1>
+    <p>Роль: <strong id="user-role">—</strong></p>
+  </div>
+
+  <!-- Notifications -->
+  <div class="uw-filter-box" style="margin-bottom:2rem;max-width:100%">
+    <h6>🔔 Уведомления</h6>
+    <div id="notif-list"><div class="uw-spinner"></div></div>
+  </div>
+
+  <!-- ── STUDENT SECTION ── -->
+  <div id="student-section" style="display:none">
+    <div class="uw-stats">
+      <div class="uw-stat-card">
+        <div class="num" id="stat-total">—</div>
+        <div class="lbl">Всего заявок</div>
+      </div>
+      <div class="uw-stat-card amber">
+        <div class="num" id="stat-pending">—</div>
+        <div class="lbl">На рассмотрении</div>
+      </div>
+      <div class="uw-stat-card">
+        <div class="num" id="stat-accepted">—</div>
+        <div class="lbl">Принято</div>
+      </div>
+    </div>
+
+    <div class="uw-table-wrap">
+      <div class="uw-table-head">
+        <h5>Мои заявки</h5>
+        <a href="index.html" class="btn-primary-uw" style="padding:.45rem 1.1rem;font-size:.88rem">+ Найти вакансии</a>
+      </div>
+      <div style="overflow-x:auto">
+        <table class="uw-table">
+          <thead>
+            <tr>
+              <th>Вакансия</th>
+              <th>Дата</th>
+              <th>Письмо</th>
+              <th>Статус</th>
+            </tr>
+          </thead>
+          <tbody id="apps-tbody">
+            <tr><td colspan="4" style="text-align:center;padding:2rem"><div class="uw-spinner" style="margin:0 auto"></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── EMPLOYER SECTION ── -->
+  <div id="employer-section" style="display:none">
+
+    <!-- Create job form -->
+    <div class="uw-form-card" style="margin-bottom:2rem">
+      <h2 style="font-size:1.25rem;margin-bottom:1.25rem">Создать новую вакансию</h2>
+      <form id="create-job-form">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+          <div class="form-group" style="grid-column:1/-1">
+            <label>Название вакансии *</label>
+            <input name="title" class="form-control-uw" required placeholder="Напр.: Ассистент кафедры математики">
+          </div>
+          <div class="form-group" style="grid-column:1/-1">
+            <label>Описание *</label>
+            <textarea name="description" class="form-control-uw" required rows="4"
+              placeholder="Опишите обязанности, требования и условия работы..."></textarea>
+          </div>
+          <div class="form-group">
+            <label>Зарплата (₸/мес)</label>
+            <input name="salary" type="number" class="form-control-uw" placeholder="Напр.: 50000">
+          </div>
+          <div class="form-group">
+            <label>Тип занятости</label>
+            <select name="job_type" class="form-control-uw">
+              <option value="internship">Стажировка</option>
+              <option value="part_time">Подработка</option>
+              <option value="assistant">Ассистент</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Категория</label>
+            <select name="category" id="job-category" class="form-control-uw">
+              <option value="">— Без категории —</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Дедлайн</label>
+            <input name="deadline" type="date" class="form-control-uw">
+          </div>
+        </div>
+        <button type="submit" class="btn-primary-uw">Опубликовать вакансию</button>
+      </form>
+    </div>
+
+    <!-- My jobs table -->
+    <div class="uw-table-wrap">
+      <div class="uw-table-head">
+        <h5>Мои вакансии</h5>
+      </div>
+      <div style="overflow-x:auto">
+        <table class="uw-table">
+          <thead>
+            <tr><th>Название</th><th>Зарплата</th><th>Статус</th><th>Действие</th></tr>
+          </thead>
+          <tbody id="jobs-tbody">
+            <tr><td colspan="4" style="text-align:center;padding:2rem"><div class="uw-spinner" style="margin:0 auto"></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer class="uw-footer">
+  © 2025 UniWork — платформа университета
+</footer>
+
+<div class="uw-toast" id="uw-toast"></div>
+
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/dashboard.js"></script>
+<script>initDashboard();</script>
+</body>
+</html>

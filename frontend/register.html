@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UniWork — Регистрация</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="uw-auth-page">
+  <div class="uw-auth-card">
+    <div class="logo-area">
+      <a href="index.html" class="uw-logo" style="justify-content:center;font-size:1.6rem">Uni<span>Work</span></a>
+    </div>
+    <h1>Создать аккаунт</h1>
+    <p class="subtitle">Выберите роль и заполните данные</p>
+
+    <!-- Role selector -->
+    <div class="role-tabs">
+      <button type="button" class="role-tab active" data-role="student">👨‍🎓 Студент</button>
+      <button type="button" class="role-tab" data-role="employer">🏢 Работодатель</button>
+    </div>
+
+    <form id="register-form">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.85rem">
+        <div class="form-group">
+          <label>Имя *</label>
+          <input name="first_name" class="form-control-uw" required placeholder="Алия">
+        </div>
+        <div class="form-group">
+          <label>Фамилия *</label>
+          <input name="last_name" class="form-control-uw" required placeholder="Сейткали">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Email *</label>
+        <input name="email" type="email" class="form-control-uw" required placeholder="student@university.kz">
+      </div>
+      <div class="form-group">
+        <label>Пароль *</label>
+        <input name="password" type="password" class="form-control-uw" required placeholder="Минимум 6 символов">
+      </div>
+
+      <!-- Student fields -->
+      <div id="student-fields">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.85rem">
+          <div class="form-group">
+            <label>Специальность</label>
+            <input name="specialty" class="form-control-uw" placeholder="Информатика">
+          </div>
+          <div class="form-group">
+            <label>Курс</label>
+            <select name="year" class="form-control-uw">
+              <option value="">—</option>
+              <option>1</option><option>2</option><option>3</option><option>4</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Employer fields -->
+      <div id="employer-fields" style="display:none">
+        <div class="form-group">
+          <label>Организация / Отдел *</label>
+          <input name="organization" class="form-control-uw" placeholder="Кафедра прикладной математики">
+        </div>
+      </div>
+
+      <button type="submit" class="btn-primary-uw" style="width:100%;margin-top:.5rem">Зарегистрироваться</button>
+    </form>
+
+    <p style="text-align:center;margin-top:1.5rem;font-size:.9rem;color:var(--muted)">
+      Уже есть аккаунт? <a href="login.html" style="color:var(--amber);font-weight:600">Войти</a>
+    </p>
+  </div>
+</div>
+<div class="uw-toast" id="uw-toast"></div>
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+<script>initRegister();</script>
+</body>
+</html>

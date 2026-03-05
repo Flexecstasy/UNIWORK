@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UniWork — Вакансия</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<nav class="uw-navbar">
+  <a href="index.html" class="uw-logo">Uni<span>Work</span></a>
+  <button class="uw-burger" id="uw-burger"><span></span><span></span><span></span></button>
+  <ul class="uw-nav-links" id="uw-nav-links">
+    <li><a href="index.html">← Все вакансии</a></li>
+    <div id="nav-right" style="display:contents"></div>
+  </ul>
+</nav>
+
+<div id="detail-root">
+  <div class="uw-loader" style="padding:6rem"><div class="uw-spinner"></div>Загрузка вакансии...</div>
+</div>
+
+<footer class="uw-footer">
+  © 2025 UniWork — платформа университета
+</footer>
+
+<div class="uw-toast" id="uw-toast"></div>
+
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+<script>
+const TYPE_LABELS = { internship: 'Стажировка', part_time: 'Подработка', assistant: 'Ассистент' };
+const TYPE_BADGE  = { internship: 'uw-badge-intern', part_time: 'uw-badge-part', assistant: 'uw-badge-assistant' };
+
+async function init() {
+  setupNavbar();
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get('id');
+  if (!id) { window.location.href = 'index.html'; return; }
+
+  const root = document.getElementById('detail-root');
+  try {
+    const job = await jobsAPI.get(id);
+    const salary = job.salary ? `${Math.round(job.salary).toLocaleString('ru')} ₸` : 'Не указана';
+    const deadline = job.deadline ? new Date(job.deadline).toLocaleDateString('ru', {day:'numeric', month:'long', year:'numeric'}) : 'Не ограничен';
+    const created  = new Date(job.created_at).toLocaleDateString('ru', {day:'numeric', month:'long'});
+    const user = getCurrentUser();
+    const isStudent = user?.role === 'student';
+
+    root.innerHTML = `
+      <div class="uw-detail-header">
+        <div class="container-inner">
+          <a href="index.html" style="color:rgba(255,255,255,.6);font-size:.88rem;text-decoration:none;display:inline-block;margin-bottom:.75rem">← Все вакансии</a>
+          <h1 style="font-size:clamp(1.5rem,4vw,2.3rem)">${job.title}</h1>
+          <div class="uw-detail-meta">
+            <span class="uw-badge ${TYPE_BADGE[job.job_type]}">${TYPE_LABELS[job.job_type]}</span>
+            <span style="color:rgba(255,255,255,.65);font-size:.88rem">Опубликовано ${created}</span>
+            <span style="color:${job.status==='open'?'#4ADE80':'#F87171'};font-size:.88rem;font-weight:600">
+              ${job.status === 'open' ? '● Набор открыт' : '● Набор закрыт'}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="uw-detail-body">
+        <div class="uw-detail-content">
+          <h4>О вакансии</h4>
+          <p>${job.description.replace(/\n/g, '<br>')}</p>
+
+          <h4>Что мы предлагаем</h4>
+          <ul>
+            <li>Гибкий график работы, совместимый с учёбой</li>
+            <li>Опыт работы в университетской среде</li>
+            <li>Запись в трудовую книжку / портфолио</li>
+            ${job.salary ? `<li>Оплата: <strong>${salary}</strong></li>` : ''}
+          </ul>
+
+          <h4>Требования</h4>
+          <ul>
+            <li>Студент очной или заочной формы обучения</li>
+            <li>Ответственность и желание развиваться</li>
+          </ul>
+        </div>
+
+        <aside>
+          <div class="uw-apply-card">
+            <div class="salary-big">${salary}</div>
+            <p style="color:var(--muted);font-size:.83rem;margin:.25rem 0 1.25rem">в месяц</p>
+
+            <div class="info-row"><span>Тип</span><span>${TYPE_LABELS[job.job_type]}</span></div>
+            <div class="info-row"><span>Дедлайн</span><span>${deadline}</span></div>
+            <div class="info-row"><span>Работодатель</span><span>#${job.employer_id}</span></div>
+            <div class="info-row"><span>Статус</span><span>${job.status === 'open' ? '✅ Открыта' : '🔒 Закрыта'}</span></div>
+
+            <div style="margin-top:1.5rem">
+              ${job.status === 'open'
+                ? isStudent
+                  ? `<a href="apply.html?id=${job.id}" class="btn-primary-uw" style="width:100%;text-align:center">Откликнуться →</a>`
+                  : !user
+                    ? `<a href="login.html" class="btn-primary-uw" style="width:100%;text-align:center">Войти, чтобы откликнуться</a>`
+                    : `<div style="color:var(--muted);font-size:.9rem;text-align:center">Работодатели не могут подавать заявки</div>`
+                : `<div style="color:var(--muted);font-size:.9rem;text-align:center">Набор завершён</div>`
+              }
+            </div>
+          </div>
+        </aside>
+      </div>
+    `;
+  } catch (err) {
+    root.innerHTML = `<div class="uw-empty" style="padding:6rem"><div class="icon">⚠️</div><p>${err.message}</p><a href="index.html" class="btn-primary-uw" style="margin-top:1.5rem">На главную</a></div>`;
+  }
+}
+
+init();
+</script>
+</body>
+</html>

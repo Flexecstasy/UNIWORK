@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UniWork — Работа и стажировки в кампусе</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="uw-navbar">
+  <a href="index.html" class="uw-logo">Uni<span>Work</span></a>
+  <button class="uw-burger" id="uw-burger"><span></span><span></span><span></span></button>
+  <ul class="uw-nav-links" id="uw-nav-links">
+    <li><a href="index.html">Вакансии</a></li>
+    <div id="nav-right" style="display:contents"></div>
+  </ul>
+</nav>
+
+<!-- Hero -->
+<section class="uw-hero">
+  <h1>Найди <em>стажировку</em> или<br>подработку в университете</h1>
+  <p>Все возможности кампуса — в одном месте. Без лишнего поиска.</p>
+  <div class="uw-search">
+    <input type="text" id="search-input" placeholder="Поиск по названию вакансии...">
+    <select id="search-type">
+      <option value="">Все типы</option>
+      <option value="internship">Стажировка</option>
+      <option value="part_time">Подработка</option>
+      <option value="assistant">Ассистент</option>
+    </select>
+    <button id="search-btn">🔍 Найти</button>
+  </div>
+</section>
+
+<!-- Layout: sidebar + grid -->
+<div class="uw-layout">
+  <!-- Sidebar filters -->
+  <aside class="uw-sidebar">
+    <div class="uw-filter-box">
+      <h6>Категория</h6>
+      <div id="cat-list">
+        <div class="uw-loader"><div class="uw-spinner"></div></div>
+      </div>
+    </div>
+    <div class="uw-filter-box">
+      <h6>Тип занятости</h6>
+      <div class="uw-filter-item"><input type="radio" name="type-f" value="" id="type-all" checked><label for="type-all">Все</label></div>
+      <div class="uw-filter-item"><input type="radio" name="type-f" value="internship" id="type-int"><label for="type-int">Стажировка</label></div>
+      <div class="uw-filter-item"><input type="radio" name="type-f" value="part_time" id="type-pt"><label for="type-pt">Подработка</label></div>
+      <div class="uw-filter-item"><input type="radio" name="type-f" value="assistant" id="type-as"><label for="type-as">Ассистент</label></div>
+    </div>
+  </aside>
+
+  <!-- Main content -->
+  <main class="uw-main">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem">
+      <h2 class="uw-section-title" style="margin:0">Открытые вакансии <span id="jobs-count"></span></h2>
+    </div>
+    <div class="uw-jobs-grid" id="jobs-grid">
+      <div class="uw-loader" style="grid-column:1/-1"><div class="uw-spinner"></div>Загрузка вакансий...</div>
+    </div>
+  </main>
+</div>
+
+<footer class="uw-footer">
+  © 2025 UniWork — платформа университета &nbsp;·&nbsp; <a href="#">Документация API</a>
+</footer>
+
+<div class="uw-toast" id="uw-toast"></div>
+
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/jobs.js"></script>
+<script>
+  // Sync sidebar type filter with search select
+  document.querySelectorAll('input[name="type-f"]').forEach(inp => {
+    inp.addEventListener('change', () => {
+      document.getElementById('search-type').value = inp.value;
+    });
+  });
+  document.getElementById('search-type').addEventListener('change', function() {
+    document.querySelectorAll('input[name="type-f"]').forEach(inp => {
+      inp.checked = inp.value === this.value;
+    });
+  });
+  initJobs();
+</script>
+</body>
+</html>
