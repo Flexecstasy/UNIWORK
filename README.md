@@ -1,9 +1,6 @@
 # UniWork - Платформа поиска работы для студентов
 
 
-[![Python](https://img.shields.io/badge/Python-3.14-blue)]()
-[![FastAPI](https://img.shields.io/badge/FastAPI-0.115%2B-darkgreen)]()
-
 
 ---
 
@@ -45,7 +42,6 @@ uvicorn app.main:app --reload
 - Адаптивный дизайн
 - Интеграция с REST API
 
-### Описание
 
 **UniWork** — это веб-платформа, которая связывает студентов с работодателями, предоставляя возможность:
 
@@ -123,7 +119,6 @@ uniwork/
 
 #### Требования
 - Python 3.12+
-- Node.js не требуется (Vanilla JavaScript)
 - SQLite (включен в Python)
 
 #### Backend
@@ -169,42 +164,4 @@ uniwork/
    ```
    http://localhost:3000
    ```
-
-### Тестирование
-
-#### Установка зависимостей для тестирования
-
-```bash
-cd backend
-pip install -r tests/requirements.txt
-```
-
-#### Запуск тестов
-
-**Все тесты:**
-```bash
-pytest tests/ -v
-```
-
-**Тесты обработки ошибок:**
-```bash
-pytest tests/test_error_handling.py -v
-```
-
-**С отчетом покрытия кода:**
-```bash
-pytest tests/ --cov=app.core.errors --cov-report=html
-```
-
-**Конкретный тест:**
-```bash
-pytest tests/test_error_handling.py::TestValidationErrors::test_missing_required_field -v
-```
-
-**По маркерам (категориям):**
-```bash
-pytest tests/ -m validation -v
-pytest tests/ -m authorization -v
-```
-
 
