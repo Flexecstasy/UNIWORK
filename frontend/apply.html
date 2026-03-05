@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UniWork — Подача заявки</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<nav class="uw-navbar">
+  <a href="index.html" class="uw-logo">Uni<span>Work</span></a>
+  <button class="uw-burger" id="uw-burger"><span></span><span></span><span></span></button>
+  <ul class="uw-nav-links" id="uw-nav-links">
+    <li><a href="index.html">Вакансии</a></li>
+    <div id="nav-right" style="display:contents"></div>
+  </ul>
+</nav>
+
+<div class="uw-form-wrap">
+  <div style="margin-bottom:1.5rem">
+    <a id="back-link" href="index.html" style="color:var(--muted);text-decoration:none;font-size:.9rem">← Назад к вакансии</a>
+  </div>
+
+  <!-- Job preview -->
+  <div id="job-preview" style="background:var(--navy);color:#fff;border-radius:var(--radius);padding:1.25rem 1.5rem;margin-bottom:1.5rem">
+    <div class="uw-spinner" style="border-color:rgba(255,255,255,.2);border-top-color:var(--amber)"></div>
+  </div>
+
+  <div class="uw-form-card">
+    <h2>Подача заявки</h2>
+    <p style="color:var(--muted);font-size:.92rem;margin-bottom:1.75rem">Заполните форму — работодатель получит вашу заявку и свяжется с вами.</p>
+
+    <form id="apply-form">
+      <div class="form-group">
+        <label for="cover">Сопроводительное письмо</label>
+        <textarea id="cover" name="cover" class="form-control-uw"
+          placeholder="Расскажите о себе: почему вас интересует эта позиция, какой опыт у вас есть, когда вы готовы начать работу..."
+          rows="6"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="resume-select">Резюме (необязательно)</label>
+        <select id="resume-select" name="resume_id" class="form-control-uw">
+          <option value="">— Без резюме —</option>
+        </select>
+        <p style="font-size:.8rem;color:var(--muted);margin-top:.35rem">Резюме можно добавить в личном кабинете</p>
+      </div>
+
+      <div style="display:flex;gap:1rem;margin-top:.5rem;flex-wrap:wrap">
+        <button type="submit" class="btn-primary-uw">Отправить заявку →</button>
+        <a id="cancel-link" href="#" class="btn-outline-uw">Отмена</a>
+      </div>
+    </form>
+
+    <!-- Success state (hidden) -->
+    <div id="success-state" style="display:none;text-align:center;padding:2rem 0">
+      <div style="font-size:3rem;margin-bottom:1rem">🎉</div>
+      <h3 style="margin-bottom:.5rem">Заявка отправлена!</h3>
+      <p style="color:var(--muted);margin-bottom:1.75rem">Работодатель рассмотрит её в ближайшее время.</p>
+      <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap">
+        <a href="dashboard.html" class="btn-primary-uw">Мой кабинет</a>
+        <a href="index.html" class="btn-outline-uw">Другие вакансии</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="uw-toast" id="uw-toast"></div>
+
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+<script>
+const TYPE_LABELS = { internship: 'Стажировка', part_time: 'Подработка', assistant: 'Ассистент' };
+
+async function init() {
+  // Auth guard
+  const user = requireAuth('login.html');
+  if (!user) return;
+  if (user.role !== 'student') {
+    toast('Только студенты могут подавать заявки', 'error');
+    setTimeout(() => window.location.href = 'index.html', 1500);
+    return;
+  }
+
+  setupNavbar();
+
+  const params = new URLSearchParams(window.location.search);
+  const jobId = params.get('id');
+  if (!jobId) { window.location.href = 'index.html'; return; }
+
+  document.getElementById('back-link').href  = `job-detail.html?id=${jobId}`;
+  document.getElementById('cancel-link').href = `job-detail.html?id=${jobId}`;
+
+  // Load job preview
+  try {
+    const job = await jobsAPI.get(jobId);
+    document.title = `UniWork — Заявка: ${job.title}`;
+    document.getElementById('job-preview').innerHTML = `
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem">
+        <div>
+          <div style="font-size:.8rem;opacity:.6;margin-bottom:.2rem">Вы откликаетесь на позицию</div>
+          <div style="font-family:var(--font-head);font-size:1.2rem;font-weight:700">${job.title}</div>
+          <div style="font-size:.85rem;opacity:.7;margin-top:.15rem">${TYPE_LABELS[job.job_type]} · Работодатель #${job.employer_id}</div>
+        </div>
+        ${job.salary ? `<div style="font-family:var(--font-head);font-size:1.4rem;font-weight:800;color:var(--amber)">${Math.round(job.salary).toLocaleString('ru')} ₸</div>` : ''}
+      </div>
+    `;
+  } catch {
+    document.getElementById('job-preview').innerHTML = `<span style="opacity:.6">Вакансия #${jobId}</span>`;
+  }
+
+  // Submit
+  document.getElementById('apply-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = e.target.querySelector('button[type=submit]');
+    btn.disabled = true; btn.textContent = 'Отправляю...';
+
+    const resumeVal = document.getElementById('resume-select').value;
+    try {
+      await appsAPI.apply({
+        job_id:    parseInt(jobId),
+        cover:     document.getElementById('cover').value || null,
+        resume_id: resumeVal ? parseInt(resumeVal) : null,
+      });
+      document.getElementById('apply-form').style.display = 'none';
+      document.getElementById('success-state').style.display = 'block';
+    } catch (err) {
+      toast(err.message, 'error');
+      btn.disabled = false; btn.textContent = 'Отправить заявку →';
+    }
+  });
+}
+
+init();
+</script>
+</body>
+</html>
